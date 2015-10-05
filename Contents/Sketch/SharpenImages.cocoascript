@@ -1,0 +1,92 @@
+function sharpen(context, inputRadius, inputIntensity) {
+
+var doc = context.document;
+var selection = context.selection;
+
+if([selection count] == 0){
+var app = [NSApplication sharedApplication];
+[app displayDialog:"Please select at least one image layer"]
+}
+
+var inputR = inputRadius;
+var inputI = inputIntensity;
+if(inputR == 0.0 && inputI == 0.0)
+{
+	inputR = [doc askForUserInput:"Provide sharpen radius (px):" initialValue:0.4];
+	inputR = [inputR floatValue];
+	inputI = [doc askForUserInput:"Provide sharpen intensity (from 1.0 to 3.0):" initialValue:1.0];
+	inputI = [inputI floatValue];
+}
+
+for (var i=0; i<[selection count]; i++) {
+
+var layercur = selection[i];
+var imgdata = [layercur image];
+var image2 = imgdata.image();
+var size2 = image2.size();
+var rect2 = [layercur rect];
+var size4 = rect2;
+
+var smallimg = [[NSImage alloc] initWithSize: size4.size];
+[smallimg lockFocus];
+[image2 setSize: size4.size];
+[[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationHigh];
+[image2 drawAtPoint:NSZeroPoint fromRect:CGRectMake(0, 0, size4.size.width, size4.size.height)operation:NSCompositeCopy fraction:1.0];
+[smallimg unlockFocus];   
+
+if(size4.size.width < size2.width)
+{
+//image is smaller than original image data
+var image = smallimg;
+}
+if(size4.size.width == size2.width)
+{
+//image has the same dimensions than original image data
+var image = image2;
+}
+if(size4.size.width == size2.width && smallimg != nil)
+{
+//image has the same dimensions than original image data
+var image = smallimg;
+}
+if(size4.size.width > size2.width)
+{
+//image is bigger than its original image data
+var image = image2;
+}
+
+var tiffData = [image TIFFRepresentation];
+var bitmap = [NSBitmapImageRep imageRepWithData:tiffData];
+var ciimage = [[CIImage alloc] initWithBitmapImageRep:bitmap];
+
+var filter = [CIFilter filterWithName:"CIUnsharpMask"];
+[filter setValue:ciimage forKey:"inputImage"];
+[filter setValue:inputR forKey:"inputRadius"];
+[filter setValue:inputI forKey:"inputIntensity"];
+var output = filter.outputImage();
+var rep = [NSCIImageRep imageRepWithCIImage: output];
+var imagefinal = [[NSImage alloc] initWithSize:output.extent().size];
+[imagefinal addRepresentation:rep];
+
+fill = layercur.style().fills().addNewStylePart();
+fill.setFillType(4);
+
+[fill setPatternFillType:0]
+if(size4.size.width > size2.width)
+{
+[fill setPatternTileScale:size4.size.width/size2.width]
+} 
+else {
+[fill setPatternTileScale:1]
+}
+
+[fill setPatternImage:imagefinal]
+
+[[[layercur style] fills] moveStylePartFromIndex:layercur.style().fills().count()-1 toIndex:0];
+
+}
+if (selection.count() > 1)
+[doc showMessage:"Sharpen Images: Operation complete."+selection.count()+" layers processed."]
+else
+[doc showMessage:"Sharpen Images: Operation complete."+selection.count()+" layer processed."]
+};
