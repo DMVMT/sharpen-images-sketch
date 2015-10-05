@@ -18,7 +18,7 @@ Sharpen Images also recognizes if current image layer was scaled down in your de
 The plugin is completely free for any kind of use. 
 
 #How to install:
-Download, Unzip, double click the Sharpen Images.sketchplugin file. That's it!
+Download, Unzip, double click the <b>Sharpen Images.sketchplugin</b> file. That's it!
 
 #How to update:
 Go to the Sketch Plugin folder on your Mac and replace the Sharpen Images.sketchplugin with the new one.
