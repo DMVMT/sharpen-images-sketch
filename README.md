@@ -25,4 +25,4 @@ Go to the Sketch Plugin folder on your Mac and replace the <b>Sharpen Images.ske
 
 ###Changelog:
 10/07/2015
-- Added Sketch Beta 3.4 support
+Added Sketch Beta 3.4 support
