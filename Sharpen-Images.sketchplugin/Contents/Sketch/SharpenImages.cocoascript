@@ -22,14 +22,9 @@ for (var i=0; i<[selection count]; i++) {
 
 var layercur = selection[i];
 
-//avoid opacity change by remembering it and setting it after applying the filter.
 var currentopacity = [[[layercur style] contextSettings] opacity];
 
-//temporarily set opacity to 1 for proper filtering
 [[[layercur style] contextSettings] setOpacity:1];
-
-//var imgdata = [layercur image];
-//var image2 = imgdata.image();
 
 var img = [layercur image];
 
@@ -87,8 +82,8 @@ var imagefinal = [[NSImage alloc] initWithSize:output.extent().size];
 
 fill = layercur.style().fills().addNewStylePart();
 fill.setFillType(4);
+[fill setPatternFillType:0];
 
-[fill setPatternFillType:0]
 if(size4.size.width > size2.width)
 {
 [fill setPatternTileScale:size4.size.width/size2.width]
@@ -97,10 +92,9 @@ else {
 [fill setPatternTileScale:1]
 }
 
-[fill setPatternImage:imagefinal]
+[fill setPatternImage:imagefinal];
 
 [[[layercur style] fills] moveStylePartFromIndex:layercur.style().fills().count()-1 toIndex:0];
-//restore layer opacity to its previous value
 [[[layercur style] contextSettings] setOpacity:currentopacity];
 }
 if (selection.count() > 1)
