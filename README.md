@@ -24,5 +24,5 @@ Download, Unzip, double click the <b>Sharpen Images.sketchplugin</b> file. That'
 Go to the Sketch Plugin folder on your Mac and replace the <b>Sharpen Images.sketchplugin</b> with the new one.
 
 ###Changelog:
-10/07/2015
+10/07/2015<br>
 Added Sketch Beta 3.4 support
