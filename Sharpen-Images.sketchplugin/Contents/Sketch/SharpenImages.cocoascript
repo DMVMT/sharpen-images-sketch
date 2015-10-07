@@ -21,7 +21,18 @@ if(inputR == 0.0 && inputI == 0.0)
 for (var i=0; i<[selection count]; i++) {
 
 var layercur = selection[i];
-var imgdata = [layercur image];
+
+//var imgdata = [layercur image];
+//var image2 = imgdata.image();
+
+var img = [layercur image];
+
+var sketchVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+if ([sketchVersion floatValue] < 3.4 )
+{var imgdata = [layercur image];}
+else if([sketchVersion floatValue] >= 3.4 )
+{var imgdata = [img imageData];}
+
 var image2 = imgdata.image();
 var size2 = image2.size();
 var rect2 = [layercur rect];
