@@ -94,8 +94,16 @@ else {
 
 [fill setPatternImage:imagefinal];
 
+if ([sketchVersion floatValue] < 3.4 )
+{[[[layercur style] contextSettings] setOpacity:currentopacity];}
+else if([sketchVersion floatValue] >= 3.4 )
+{[[[layercur style] contextSettings] setOpacity:1];
+[fill setOpacity:currentopacity];}
+
+
+
 [[[layercur style] fills] moveStylePartFromIndex:layercur.style().fills().count()-1 toIndex:0];
-[[[layercur style] contextSettings] setOpacity:currentopacity];
+
 }
 if (selection.count() > 1)
 [doc showMessage:"Sharpen Images: Operation complete."+selection.count()+" layers processed."]
