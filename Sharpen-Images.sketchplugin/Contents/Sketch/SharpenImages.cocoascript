@@ -22,6 +22,12 @@ for (var i=0; i<[selection count]; i++) {
 
 var layercur = selection[i];
 
+//avoid opacity change by remembering it and setting it after applying the filter.
+var currentopacity = [[[layercur style] contextSettings] opacity];
+
+//temporarily set opacity to 1 for proper filtering
+[[[layercur style] contextSettings] setOpacity:1];
+
 //var imgdata = [layercur image];
 //var image2 = imgdata.image();
 
@@ -94,7 +100,8 @@ else {
 [fill setPatternImage:imagefinal]
 
 [[[layercur style] fills] moveStylePartFromIndex:layercur.style().fills().count()-1 toIndex:0];
-
+//restore layer opacity to its previous value
+[[[layercur style] contextSettings] setOpacity:currentopacity];
 }
 if (selection.count() > 1)
 [doc showMessage:"Sharpen Images: Operation complete."+selection.count()+" layers processed."]
