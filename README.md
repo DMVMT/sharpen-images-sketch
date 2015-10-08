@@ -26,7 +26,7 @@ Go to the Sketch Plugin folder on your Mac and replace the <b>Sharpen Images.ske
 ###Changelog:
 
 10/08/2015<br>
-Sharpen Images now supports shape layers with image fills in addition to image layers
+Sharpen Images now supports rectangular shape layers with image fills in addition to image layers
 
 10/07/2015<br>
 Added Sketch Beta 3.4 support
