@@ -18,6 +18,8 @@ if(inputR == 0.0 && inputI == 0.0)
 	inputI = [inputI floatValue];
 }
 
+var sketchVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+
 for (var i=0; i<[selection count]; i++) {
 
 var layercur = selection[i];
@@ -26,15 +28,40 @@ var currentopacity = [[[layercur style] contextSettings] opacity];
 
 [[[layercur style] contextSettings] setOpacity:1];
 
-var img = [layercur image];
+// begin of shape image extraction block
+if(layercur.isKindOfClass(MSBitmapLayer))
+{
 
-var sketchVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-if ([sketchVersion floatValue] < 3.4 )
-{var imgdata = [layercur image];}
-else if([sketchVersion floatValue] >= 3.4 )
-{var imgdata = [img imageData];}
+	var img = [layercur image];
 
-var image2 = imgdata.image();
+	if ([sketchVersion floatValue] < 3.4 )
+	{
+		var imgdata = [layercur image];
+	}
+	else if([sketchVersion floatValue] >= 3.4 )
+	{
+		var imgdata = [img imageData];
+	}
+
+	var image2 = imgdata.image();
+}
+if(layercur.isKindOfClass(MSShapeGroup))
+{
+	if([sketchVersion floatValue] >= 3.4 )
+	{
+	var fillprev = layercur.style().fills().firstObject();
+	var imgdata = [[fillprev image] imageData];
+	var image2 = imgdata.image();
+	}
+	else if([sketchVersion floatValue] < 3.4 )
+	{
+	var fillprev = layercur.style().fills().firstObject();
+	var imgdata = [fillprev image];
+	var image2 = imgdata.image();
+	}
+}
+// end of shape image extraction block
+
 var size2 = image2.size();
 var rect2 = [layercur rect];
 var size4 = rect2;
@@ -67,6 +94,9 @@ if(size4.size.width > size2.width)
 var image = image2;
 }
 
+if(layercur.isKindOfClass(MSShapeGroup))
+{var image = image2;}
+
 var tiffData = [image TIFFRepresentation];
 var bitmap = [NSBitmapImageRep imageRepWithData:tiffData];
 var ciimage = [[CIImage alloc] initWithBitmapImageRep:bitmap];
@@ -80,16 +110,36 @@ var rep = [NSCIImageRep imageRepWithCIImage: output];
 var imagefinal = [[NSImage alloc] initWithSize:output.extent().size];
 [imagefinal addRepresentation:rep];
 
-fill = layercur.style().fills().addNewStylePart();
-fill.setFillType(4);
-[fill setPatternFillType:0];
+var fill = layercur.style().fills().addNewStylePart();
 
+fill.setFillType(4);
+
+if(layercur.isKindOfClass(MSShapeGroup))
+{
+var prevpatternfilltype = [fillprev patternFillType];
+var prevpatterntilescale = [fillprev patternTileScale];
+
+[fill setPatternFillType:prevpatternfilltype];
+
+} 
+else
+{
+[fill setPatternFillType:0];
+}
+
+if(layercur.isKindOfClass(MSBitmapLayer)){
 if(size4.size.width > size2.width)
 {
 [fill setPatternTileScale:size4.size.width/size2.width]
 } 
 else {
-[fill setPatternTileScale:1]
+[fill setPatternTileScale:1];
+}
+}
+
+if(layercur.isKindOfClass(MSShapeGroup))
+{
+[fill setPatternTileScale:prevpatterntilescale];
 }
 
 [fill setPatternImage:imagefinal];
@@ -100,10 +150,14 @@ else if([sketchVersion floatValue] >= 3.4 )
 {[[[layercur style] contextSettings] setOpacity:1];
 [fill setOpacity:currentopacity];}
 
-
-
+// if shape layer was processed then we need to place new fill higher
+if(layercur.isKindOfClass(MSShapeGroup))
+{
+[[[layercur style] fills] moveStylePartFromIndex:layercur.style().fills().count()-1 toIndex:1];	
+}
+else if(layercur.isKindOfClass(MSBitmapLayer)){
 [[[layercur style] fills] moveStylePartFromIndex:layercur.style().fills().count()-1 toIndex:0];
-
+}
 }
 if (selection.count() > 1)
 [doc showMessage:"Sharpen Images: Operation complete."+selection.count()+" layers processed."]
