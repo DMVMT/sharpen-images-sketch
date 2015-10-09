@@ -26,6 +26,8 @@ Go to the Sketch Plugin folder on your Mac and replace the <b>Sharpen Images.ske
 ###Changelog:
 
 10/09/2015<br>
+Fixed an issue with image layers when resizing them after applying the filter. Sharpened fill is applied to image layers now in 'Fill' mode.
+
 Fixed an issue when shape layer is processed. Now original layer image fill remains in the same scale and size in the shape, in case of 'Fill' type usage.
 
 10/08/2015<br>
