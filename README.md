@@ -1,5 +1,7 @@
 
 #Sharpen Images Plugin for Sketch
+![Screenshot](http://i.imgur.com/5vopqvq.png)
+
 The plugin allows to apply Sharpen filter to your layers in Sketch.
 
 Sharpen Images is powerful plugin that allows you to apply Unsharp Mask filter to image layers and shape layers with image fills in Sketch.
