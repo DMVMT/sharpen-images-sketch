@@ -125,7 +125,7 @@ var prevpatterntilescale = [fillprev patternTileScale];
 } 
 else
 {
-[fill setPatternFillType:0];
+[fill setPatternFillType:1];
 }
 
 if(layercur.isKindOfClass(MSBitmapLayer)){
