@@ -25,6 +25,9 @@ Go to the Sketch Plugin folder on your Mac and replace the <b>Sharpen Images.ske
 
 ###Changelog:
 
+10/09/2015<br>
+Fixed an issue when shape layer is processed. Original fill layer remains the same scale and size in the shape, in case of 'Fill' type usage.
+
 10/08/2015<br>
 Sharpen Images now supports shape layers with image fills in addition to image layers
 
