@@ -27,7 +27,7 @@ Go to the Sketch Plugin folder on your Mac and replace the <b>Sharpen Images.ske
 
 ###Changelog:
 
-01/29/2015<br>
+01/29/2016<br>
 Added Sketch 3.5+ support
 
 10/09/2015<br>
