@@ -38,9 +38,13 @@ if(layercur.isKindOfClass(MSBitmapLayer))
 	{
 		var imgdata = [layercur image];
 	}
-	else if([sketchVersion floatValue] >= 3.4 )
+	else if([sketchVersion floatValue] >= 3.4 && [sketchVersion floatValue] < 3.5)
 	{
 		var imgdata = [img imageData];
+	}
+	else if([sketchVersion floatValue] >= 3.5)
+	{
+		var imgdata = img;
 	}
 
 	var image2 = imgdata.image();
