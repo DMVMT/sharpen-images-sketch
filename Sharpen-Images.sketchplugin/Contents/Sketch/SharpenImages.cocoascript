@@ -46,6 +46,10 @@ if(layercur.isKindOfClass(MSBitmapLayer))
 	{
 		var imgdata = img;
 	}
+	else if([sketchVersion floatValue] >= 3.7)
+	{
+		var imgdata = img;
+	}
 
 	var image2 = imgdata.image();
 }
@@ -114,7 +118,12 @@ var rep = [NSCIImageRep imageRepWithCIImage: output];
 var imagefinal = [[NSImage alloc] initWithSize:output.extent().size];
 [imagefinal addRepresentation:rep];
 
-var fill = layercur.style().fills().addNewStylePart();
+if([sketchVersion floatValue] >= 3.7 )
+{
+	var fill = layercur.style().addStylePartOfType(0);
+} else {
+	var fill = layercur.style().fills().addNewStylePart();
+}
 
 fill.setFillType(4);
 
